@@ -75,7 +75,6 @@
             box-shadow: 0 0 20px var(--glow-red);
         }
 
-        /* UPDATED: TWO-LINE BOLD TEXT */
         .thought {
             position: absolute;
             font-size: 1.1rem; 
@@ -89,9 +88,9 @@
             z-index: 5;
             color: var(--text-red);
             text-shadow: 0 0 8px rgba(255, 0, 0, 0.9), 0 0 15px rgba(0, 0, 0, 1);
-            -webkit-text-stroke: 1px #ff0000; /* Increased stroke for even more boldness */
+            -webkit-text-stroke: 1px #ff0000; 
             text-align: center;
-            max-width: 250px; /* Forces wrap if phrase is too long */
+            max-width: 250px; 
             line-height: 1.2;
         }
 
@@ -138,7 +137,6 @@
     </div>
 
     <script>
-        // Formatted phrases with <br> for manual 2-line control
         const phrases = [
             "i cant<br>sleep", 
             "i need pills<br>i should sleep", 
@@ -161,8 +159,7 @@
             
             const isTop = Math.random() > 0.5;
             const side = Math.random() > 0.5 ? 'left' : 'right';
-            
-            // X constrained to quadrants (15-35% or 65-85%)
+
             let x = (side === 'left') ? (Math.random() * 20 + 15) : (Math.random() * 20 + 65); 
             let y;
 
@@ -193,4 +190,5 @@
         setInterval(spawnThought, 1500);
     </script>
 </body>
+
 </html>
