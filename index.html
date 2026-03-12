@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSOMNIA | DECODE</title>
+    <style>
+        :root {
+            --glow-red: #ff0000;
+            --deep-black: #000000;
+            --text-red: #ff1a1a;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--deep-black);
+            color: var(--glow-red);
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 100;
+            opacity: 0.12;
+            pointer-events: none;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+        }
+
+        .vignette {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 10%, rgba(0,0,0,1) 85%);
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .eye-system {
+            display: flex;
+            gap: 80px;
+            z-index: 20; 
+            position: relative;
+        }
+
+        .eye {
+            width: 130px;
+            height: 60px;
+            background: #000;
+            border: 3px solid var(--glow-red);
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            box-shadow: inset 0 0 35px #440000, 0 0 15px rgba(255, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        
+        .eye.right {
+            transform: rotate(5deg);
+        }
+
+        .pupil {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 28px;
+            height: 28px;
+            background: var(--glow-red);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--glow-red);
+        }
+
+        /* UPDATED: TWO-LINE BOLD TEXT */
+        .thought {
+            position: absolute;
+            font-size: 1.1rem; 
+            font-weight: 900;   
+            opacity: 0;
+            filter: blur(4px);
+            transition: opacity 1s, filter 1s;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 5;
+            color: var(--text-red);
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.9), 0 0 15px rgba(0, 0, 0, 1);
+            -webkit-text-stroke: 1px #ff0000; /* Increased stroke for even more boldness */
+            text-align: center;
+            max-width: 250px; /* Forces wrap if phrase is too long */
+            line-height: 1.2;
+        }
+
+        .flash-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            opacity: 0;
+            z-index: 200;
+            pointer-events: none;
+        }
+
+        @keyframes flash-trigger {
+            0% { opacity: 0; }
+            98% { opacity: 0; }
+            99% { opacity: 0.85; }
+            100% { opacity: 0; }
+        }
+
+        .active-flash {
+            animation: flash-trigger 3s infinite;
+        }
+
+        .jitter {
+            animation: jitter-anim 0.1s infinite;
+        }
+
+        @keyframes jitter-anim {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(1px, -1px); }
+            100% { transform: translate(-1px, 1px); }
+        }
+    </style>
+</head>
+<body class="jitter">
+
+    <div class="noise"></div>
+    <div class="vignette"></div>
+    <div class="flash-overlay active-flash"></div>
+
+    <div class="eye-system">
+        <div class="eye left"><div class="pupil"></div></div>
+        <div class="eye right"><div class="pupil"></div></div>
+    </div>
+
+    <script>
+        // Formatted phrases with <br> for manual 2-line control
+        const phrases = [
+            "i cant<br>sleep", 
+            "i need pills<br>i should sleep", 
+            "i should<br>sleep", 
+            "overthinking<br>again", 
+            "stop thinking<br>sleep", 
+            "thoughts are<br>blocking peace",
+            "3:00 am<br>again",
+            "walls are<br>humming",
+            "eyes are<br>burning",
+            "did i hear<br>someone?",
+            "just close<br>them",
+            "why am i<br>awake?"
+        ];
+
+        function spawnThought() {
+            const thought = document.createElement('div');
+            thought.className = 'thought';
+            thought.innerHTML = phrases[Math.floor(Math.random() * phrases.length)];
+            
+            const isTop = Math.random() > 0.5;
+            const side = Math.random() > 0.5 ? 'left' : 'right';
+            
+            // X constrained to quadrants (15-35% or 65-85%)
+            let x = (side === 'left') ? (Math.random() * 20 + 15) : (Math.random() * 20 + 65); 
+            let y;
+
+            if (isTop) {
+                y = Math.random() * 15 + 10; 
+            } else {
+                y = Math.random() * 15 + 75; 
+            }
+
+            thought.style.left = x + '%';
+            thought.style.top = y + '%';
+            thought.style.transform = `translateX(-50%)`; 
+            
+            document.body.appendChild(thought);
+
+            setTimeout(() => {
+                thought.style.opacity = '1';
+                thought.style.filter = 'blur(0px)';
+            }, 50);
+
+            setTimeout(() => {
+                thought.style.opacity = '0';
+                thought.style.filter = 'blur(10px)';
+                setTimeout(() => thought.remove(), 2000);
+            }, 3000); 
+        }
+
+        setInterval(spawnThought, 1500);
+    </script>
+</body>
+</html>
